@@ -4,10 +4,24 @@ clear all; close all; clc
 global Ad Bd B_pd Q R S x0 T
 
 %% Initialization
-A = cell(3, 1); B = cell(3, 1);
+A = cell(3, 1); B = cell(3, 1); eig_A = zeros(2, 3);
+controllable = zeros(3, 1); stablizable = ones(3, 1);
+Wa = cell(3, 1); Wa_det = zeros(3, 1);
 A{1} = [-1, 1; -1, 1]; B{1} = [1, 1; 2, 1];
 A{2} = [-1, 2; -1, 2]; B{2} = [2, 0; 1, 2];
 A{3} = [-1, 3; -1, 3]; B{3} = [1, 0; 2, 2];
+for i = 1: 3
+    eig_A(:, i) = eig(A{i});
+    controllable(i) = (rank([A{i}, A{i}*B{i}]) == 2);
+%     [Wa{i}, ~] = CtrGram(A{i}, B{i});
+%     Wa_det(i) = det(Wa{i});
+    for j = 1: 2
+        rj = rank([A{i} - eig(j, i)*eye(2), B{i}]);
+        if rj ~= 2 && eig_A(j, i) >= 0
+            stablizable(i) = 0;
+        end
+    end
+end
 
 Q = 2*eye(2); R = 2*eye(2); S = eye(2);
 

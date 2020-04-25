@@ -46,16 +46,23 @@ xlabel('Time [sec]');
 ylabel('Mode');
 axis([0, 2.5, 0.8, 2.2]);
 figure(2); hold on
+subplot(4, 1, 1);
 plot(T, x(1, :), 'b-', 'LineWidth', 1);
-plot(T, x(2, :), 'g-', 'LineWidth', 1);
-legend('x_1', 'x_2');
-xlabel('Time [s]'); ylabel('State');
-figure(3); hold on
+axis([0, 2.5, 0, 2]);
+xlabel('Time [s]'); ylabel('x_1');
+subplot(4, 1, 2);
+plot(T, x(2, :), 'b-', 'LineWidth', 1);
+axis([0, 2.5, 0, 10]);
+xlabel('Time [s]'); ylabel('x_2');
+subplot(4, 1, 3);
 plot(T, p(1, :), 'b-', 'LineWidth', 1);
-plot(T, p(2, :), 'b--', 'LineWidth', 1);
-legend('p_1 TPBVP', 'p_1 Riccati');
-xlabel('Time [s]'); ylabel('Co-State');
-figure(4); hold on
+axis([0, 2.5, 0, 10]);
+xlabel('Time [s]'); ylabel('p_1');
+subplot(4, 1, 4);
+plot(T, p(2, :), 'b-', 'LineWidth', 1);
+axis([0, 2.5, 0, 10]);
+xlabel('Time [s]'); ylabel('p_2');
+figure(3); hold on
 plot(x(1, :), x(2, :), 'k-', 'LineWidth', 1);
 xlabel('x_1'); ylabel('x_2');
 axis([-3, 5, 0, 6]);
