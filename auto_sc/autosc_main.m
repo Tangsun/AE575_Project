@@ -1,5 +1,4 @@
 % Reproduce case study A in the SQLR paper
-
 clear all; close all; clc
 
 %% Initialization
@@ -40,11 +39,12 @@ for i = 1: length(T)-1
     x(:, i+1) = Ad{mode(i)}*x(:, i);
 end
 
-
-
 %% Plot results
 figure(1); hold on
-plot(T, mode, 'k-', 'LineWidth', 1);
+plot(T(1: end-1), mode(1: end-1), 'k-', 'LineWidth', 1);
+xlabel('Time [sec]');
+ylabel('Mode');
+axis([0, 2.5, 0.8, 2.2]);
 figure(2); hold on
 plot(T, x(1, :), 'b-', 'LineWidth', 1);
 plot(T, x(2, :), 'g-', 'LineWidth', 1);
@@ -55,8 +55,7 @@ plot(T, p(1, :), 'b-', 'LineWidth', 1);
 plot(T, p(2, :), 'g-', 'LineWidth', 1);
 legend('p_1', 'p_2');
 xlabel('Time [s]'); ylabel('Co-State');
-% figure(3); hold on
-% plot(T, u(1, :), 'b-', 'LineWidth', 1);
-% plot(T, u(2, :), 'g-', 'LineWidth', 1);
-% legend('u_1', 'u_2');
-% xlabel('Time [s]'); ylabel('Control');
+figure(4); hold on
+plot(x(1, :), x(2, :), 'k-', 'LineWidth', 1);
+xlabel('x_1'); ylabel('x_2');
+axis([-3, 5, 0, 6]);

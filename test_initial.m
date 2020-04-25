@@ -14,7 +14,7 @@ x0 = [2; 1];
 
 %% Formulate simulation for discrete-time system
 Ad = cell(3, 1); Bd = cell(3, 1);
-dt = 0.005;
+dt = 0.02;
 for i = 1: 3
     sysc = ss(A{i}, B{i}, [], []);
     sysd = c2d(sysc, dt);
