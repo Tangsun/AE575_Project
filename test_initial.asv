@@ -1,7 +1,6 @@
 % Reproduce case study A in the SQLR paper
 
 clear all; close all; clc
-global Ad Bd B_pd Q R S x0 T
 
 %% Initialization
 A = cell(3, 1); B = cell(3, 1);
@@ -45,13 +44,6 @@ end
 
 %% Calculate solution using TPBVP
 T = [0: dt: 2];
-B_pd = cell(3, 1);
-for i = 1: 3
-    sys_p = ss(A{i}, [Q, S'], [], []);
-    sys_pd = c2d(sys_p, dt);
-    B_pd{i} = sys_pd.B;
-end
-
 x_s = zeros(2, length(T)); u_s = zeros(2, length(T)); 
 p_s = zeros(2, length(T)); mode_s_i = zeros(1, length(T));
 x_s(:, 1) = x0; p_0_guess = [3.2; -1.4];
@@ -64,9 +56,9 @@ for i = 1: length(T)-1
         cost_i(j) = p_s(:, i)'*((Ad{j} - Bd{j}*inv(R)*S)*x_s(:, i) - 0.5*Bd{j}*inv(R)*Bd{j}'*p_s(:, i));
     end
     [~, mode] = min(cost_i);
-    u_s(:, i) = -inv(R)*(S*x_s(:, i) + Bd{mode}'*p_s(:, i));
-    p_s(:, i+1) = -B_pd{mode}*[x(:, i); u(:, i)] - Ad{mode}'*p_s(:, i);
-    x_s(:, i+1) = Ad{mode}*x_s(:, i) + Bd{mode}*u_s(:, i);
+    u = -inv(R)*(S*x + Bd{i}'*p);
+    p = -Q*x - S'*u - Ad{mode}'*p;
+    x = Ad{mode}*x + Bd{mode}*u;
 end
     
 
@@ -75,10 +67,8 @@ figure(1); hold on
 plot(T, mode_i, 'k-', 'LineWidth', 1);
 figure(2); hold on
 plot(T, x(1, :), 'b-', 'LineWidth', 1);
-plot(T, x(2, :), 'b--', 'LineWidth', 1);
-plot(T, x_s(1, :), 'r-', 'LineWidth', 1);
-plot(T, x_s(2, :), 'r--', 'LineWidth', 1);
-legend('x_1 Riccati', 'x_2 Riccati', 'x_1 TPBVP', 'x_2 TPBVP');
+plot(T, x(2, :), 'g-', 'LineWidth', 1);
+legend('x_1', 'x_2');
 xlabel('Time [s]'); ylabel('State');
 figure(3); hold on
 plot(T, u(1, :), 'b-', 'LineWidth', 1);

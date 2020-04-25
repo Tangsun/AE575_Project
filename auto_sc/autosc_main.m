@@ -52,8 +52,8 @@ legend('x_1', 'x_2');
 xlabel('Time [s]'); ylabel('State');
 figure(3); hold on
 plot(T, p(1, :), 'b-', 'LineWidth', 1);
-plot(T, p(2, :), 'g-', 'LineWidth', 1);
-legend('p_1', 'p_2');
+plot(T, p(2, :), 'b--', 'LineWidth', 1);
+legend('p_1 TPBVP', 'p_1 Riccati');
 xlabel('Time [s]'); ylabel('Co-State');
 figure(4); hold on
 plot(x(1, :), x(2, :), 'k-', 'LineWidth', 1);
