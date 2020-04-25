@@ -1,0 +1,11 @@
+function e = single_shoot(p_0)
+    global x0 nx T Ad Qd
+    x = x0; p = p_0;
+    for i = 1: length(T)-1
+        for j = 1: 2
+            cost_i(j) = p'*Ad{j}*x;
+        end
+        [~, mode] = min(cost_i);
+        p = 
+    end
+end

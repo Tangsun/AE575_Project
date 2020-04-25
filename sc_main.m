@@ -22,23 +22,41 @@ end
 %% Formulate simulation for continuous-time system
 dt = 0.02; T = [0: dt: 2];
 nx = length(x0);
-p0_guess = P{1}*x0;
+p0_guess = [0; 0];
 p0 = fsolve(@single_shoot, p0_guess);
 
 [T_sol, xp_sol] = ode45(@(t, xp) swlin_xp(t, xp, nx), T, [x0; p0]);
 x = xp_sol(:, 1: nx);
+p = xp_sol(:, nx+1: end);
+
+mode = zeros(length(T_sol), 1);
+u = zeros(length(T_sol), 2);
+for ii = 1: length(T_sol)
+    cost_i = zeros(1, 3);
+    for i = 1: 3
+        cost_i(i) = p(ii, :)*((A{i} - B{i}*inv(R)*S)*x(ii, :)' - 0.5*B{i}*inv(R)*B{i}'*p(ii, :)');
+    end
+    [~, mode(ii)] = min(cost_i);
+    u_ii = -inv(R)*(S*x(ii, :)' + B{mode(ii)}'*p(ii, :)');
+    u(ii, :) = u_ii';
+end
 
 
 %% Plot results
-% figure(1); hold on
-% plot(T, mode_i, 'k-', 'LineWidth', 1);
+figure(1); hold on
+plot(T_sol, mode, 'k-', 'LineWidth', 1);
 figure(2); hold on
 plot(T_sol, x(:, 1), 'b-', 'LineWidth', 1);
 plot(T_sol, x(:, 2), 'g-', 'LineWidth', 1);
 legend('x_1', 'x_2');
 xlabel('Time [s]'); ylabel('State');
-% figure(3); hold on
-% plot(T, u(1, :), 'b-', 'LineWidth', 1);
-% plot(T, u(2, :), 'g-', 'LineWidth', 1);
-% legend('u_1', 'u_2');
-% xlabel('Time [s]'); ylabel('Control');
+figure(3); hold on
+plot(T_sol, u(:, 1), 'b-', 'LineWidth', 1);
+plot(T_sol, u(:, 2), 'g-', 'LineWidth', 1);
+legend('u_1', 'u_2');
+xlabel('Time [s]'); ylabel('Control');
+figure(4); hold on
+plot(T_sol, p(:, 1), 'b-', 'LineWidth', 1);
+plot(T_sol, p(:, 2), 'g-', 'LineWidth', 1);
+legend('p_1', 'p_2');
+xlabel('Time [s]'); ylabel('Co-State');
