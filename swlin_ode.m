@@ -1,6 +1,5 @@
 function dxdt = swlin_ode(t, x)
     global A B P R S
-    R = 2*eye(2); S = eye(2);
     cost_i = zeros(1, 3);
     for i = 1: 3
         lambda = P{i}*x;
